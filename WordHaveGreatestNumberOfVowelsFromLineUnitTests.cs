@@ -1,47 +1,26 @@
-using System;
-using System.Linq;
-
 public class VowelFinder
 {
-    public static string FindWordWithMostVowels(string multilineText)
+    public static string WordWithMostVowels(string line)
     {
-        if (string.IsNullOrWhiteSpace(multilineText))
-        {
+        if (string.IsNullOrWhiteSpace(line))
             return null;
-        }
 
-        string[] lines = multilineText.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] words = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        string vowels = "aeiouAEIOU";
+
         string wordWithMostVowels = null;
         int maxVowelCount = 0;
 
-        foreach (var line in lines)
+        foreach (var word in words)
         {
-            string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var word in words)
+            int vowelCount = word.Count(c => vowels.Contains(c));
+            if (vowelCount > maxVowelCount)
             {
-                int vowelCount = CountVowels(word);
-                if (vowelCount > maxVowelCount)
-                {
-                    maxVowelCount = vowelCount;
-                    wordWithMostVowels = word;
-                }
+                maxVowelCount = vowelCount;
+                wordWithMostVowels = word;
             }
         }
 
-        // If no vowels are found, return null
         return maxVowelCount > 0 ? wordWithMostVowels : null;
-    }
-
-    private static int CountVowels(string word)
-    {
-        return word.Count(c => "aeiouAEIOU".Contains(c));
-    }
-
-    public static void Main(string[] args)
-    {
-        string multilineText = @"abcde abceee bcd
-                                 hello world
-                                 programming is fun";
-        Console.WriteLine(FindWordWithMostVowels(multilineText)); // Output: "abceee"
     }
 }
